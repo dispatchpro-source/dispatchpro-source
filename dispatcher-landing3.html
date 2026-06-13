@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Box Truck Dispatch Dedicated Freight Dispatcher</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:   #0D1B2A;
+    --steel:  #1E3A5F;
+    --chrome: #8FA3B1;
+    --amber:  #F5A623;
+    --amber2: #D4891A;
+    --offwhite: #F0EDE8;
+    --white:  #FFFFFF;
+    --text-muted: #6B8299;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--offwhite);
+    color: var(--navy);
+    line-height: 1.6;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 18px 5%;
+    display: flex; justify-content: space-between; align-items: center;
+    background: rgba(13,27,42,0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(245,166,35,0.15);
+  }
+  .nav-logo {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800; font-size: 1.35rem; letter-spacing: 0.04em;
+    color: var(--white);
+  }
+  .nav-logo span { color: var(--amber); }
+  .nav-cta {
+    background: var(--amber); color: var(--navy);
+    font-family: 'Inter', sans-serif; font-weight: 600; font-size: 0.85rem;
+    padding: 9px 20px; border-radius: 4px; text-decoration: none;
+    letter-spacing: 0.02em; transition: background 0.2s;
+  }
+  .nav-cta:hover { background: var(--amber2); }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    background: var(--navy);
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 120px 5% 80px;
+    position: relative; overflow: hidden;
+  }
+  .hero-road {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 6px; background: var(--steel);
+  }
+  .hero-road::after {
+    content: '';
+    position: absolute; top: 50%; left: 0; right: 0;
+    height: 2px;
+    background: repeating-linear-gradient(
+      90deg,
+      var(--amber) 0px, var(--amber) 40px,
+      transparent 40px, transparent 80px
+    );
+    transform: translateY(-50%);
+    animation: dashMove 1.2s linear infinite;
+  }
+  @keyframes dashMove {
+    from { background-position: 0 0; }
+    to   { background-position: 80px 0; }
+  }
+
+
+  .hero-eyebrow {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600; font-size: 0.9rem; letter-spacing: 0.18em;
+    color: var(--amber); text-transform: uppercase; margin-bottom: 20px;
+  }
+  .hero-headline {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800; font-size: clamp(2.8rem, 7vw, 5.5rem);
+    color: var(--white); line-height: 1.0; max-width: 780px;
+    margin-bottom: 24px; letter-spacing: -0.01em;
+  }
+  .hero-headline em {
+    color: var(--amber); font-style: normal;
+    border-bottom: 3px solid var(--amber);
+  }
+  .hero-sub {
+    font-size: 1.15rem; color: var(--chrome);
+    max-width: 520px; margin-bottom: 44px; line-height: 1.7;
+  }
+  .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--amber); color: var(--navy);
+    font-weight: 700; font-size: 1rem; padding: 15px 32px;
+    border-radius: 4px; text-decoration: none;
+    transition: background 0.2s, transform 0.15s;
+    display: inline-block;
+  }
+  .btn-primary:hover { background: var(--amber2); transform: translateY(-1px); }
+  .btn-secondary {
+    border: 1.5px solid rgba(143,163,177,0.45); color: var(--chrome);
+    font-weight: 600; font-size: 1rem; padding: 15px 32px;
+    border-radius: 4px; text-decoration: none;
+    transition: border-color 0.2s, color 0.2s;
+    display: inline-block;
+  }
+  .btn-secondary:hover { border-color: var(--amber); color: var(--amber); }
+
+  /* ── SECTION SHELL ── */
+  section { padding: 90px 5%; }
+  .section-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600; font-size: 0.8rem; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--amber); margin-bottom: 12px;
+  }
+  .section-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800; font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1.1; margin-bottom: 16px; color: var(--navy);
+  }
+  .section-sub {
+    font-size: 1.05rem; color: #4A6278; max-width: 540px; line-height: 1.7;
+  }
+
+  /* ── SERVICES ── */
+  #services { background: var(--white); }
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 2px; margin-top: 52px;
+    border: 2px solid #E4E0DA;
+  }
+  .service-card {
+    padding: 32px 28px;
+    border: 1px solid #E4E0DA;
+    position: relative; background: var(--white);
+    transition: background 0.2s;
+  }
+  .service-card:hover { background: #fafaf8; }
+  .service-icon {
+    width: 42px; height: 42px; margin-bottom: 18px;
+    background: var(--navy); border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .service-icon svg { width: 22px; height: 22px; fill: var(--amber); }
+  .service-card h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700; font-size: 1.2rem; color: var(--navy); margin-bottom: 8px;
+  }
+  .service-card p { font-size: 0.9rem; color: #5E7A8C; line-height: 1.6; }
+
+  /* ── WHY ── */
+  #why { background: var(--navy); }
+  #why .section-title { color: var(--white); }
+  #why .section-sub { color: var(--chrome); }
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px; margin-top: 52px;
+  }
+  .why-card {
+    padding: 28px 26px;
+    border: 1px solid rgba(143,163,177,0.15);
+    border-radius: 6px;
+    background: rgba(30,58,95,0.35);
+    transition: border-color 0.2s;
+  }
+  .why-card:hover { border-color: rgba(245,166,35,0.4); }
+  .why-check {
+    width: 32px; height: 32px; background: rgba(245,166,35,0.12);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    margin-bottom: 16px;
+  }
+  .why-check svg { width: 16px; height: 16px; stroke: var(--amber); }
+  .why-card h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700; font-size: 1.15rem; color: var(--white); margin-bottom: 8px;
+  }
+  .why-card p { font-size: 0.9rem; color: var(--chrome); line-height: 1.6; }
+
+  /* ── HOW IT WORKS ── */
+  #how { background: var(--offwhite); }
+  .steps-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 0; margin-top: 52px; position: relative;
+  }
+  .step {
+    padding: 36px 28px 36px 0;
+    border-top: 3px solid transparent;
+    position: relative;
+  }
+  .step:nth-child(1) { border-color: var(--amber); }
+  .step:nth-child(2) { border-color: var(--amber); }
+  .step:nth-child(3) { border-color: var(--amber); }
+  .step-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800; font-size: 3.5rem; color: #DCD8D0;
+    line-height: 1; margin-bottom: 10px;
+  }
+  .step h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700; font-size: 1.25rem; color: var(--navy); margin-bottom: 8px;
+  }
+  .step p { font-size: 0.9rem; color: #5E7A8C; line-height: 1.65; }
+
+  /* ── OFFER ── */
+  #offer {
+    background: var(--amber);
+    padding: 80px 5%;
+  }
+  .offer-inner {
+    max-width: 700px;
+  }
+  .offer-tag {
+    display: inline-block;
+    background: var(--navy); color: var(--amber);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.78rem; font-weight: 700; letter-spacing: 0.18em;
+    text-transform: uppercase; padding: 5px 14px; border-radius: 3px;
+    margin-bottom: 22px;
+  }
+  #offer .section-title { color: var(--navy); margin-bottom: 16px; }
+  #offer .section-sub { color: rgba(13,27,42,0.72); max-width: none; }
+  .offer-cta {
+    display: inline-block; margin-top: 36px;
+    background: var(--navy); color: var(--white);
+    font-weight: 700; font-size: 1rem; padding: 15px 34px;
+    border-radius: 4px; text-decoration: none;
+    transition: background 0.2s;
+  }
+  .offer-cta:hover { background: var(--steel); }
+
+  /* ── CONTACT ── */
+  #contact { background: var(--white); }
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px; margin-top: 48px;
+  }
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  .form-group.full { grid-column: 1 / -1; }
+  .form-group label {
+    font-size: 0.8rem; font-weight: 600; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--text-muted);
+  }
+  .form-group input, .form-group select {
+    padding: 13px 16px;
+    border: 1.5px solid #D8D4CE; border-radius: 4px;
+    font-family: 'Inter', sans-serif; font-size: 0.95rem; color: var(--navy);
+    background: var(--offwhite);
+    transition: border-color 0.2s;
+    outline: none;
+    -webkit-appearance: none;
+  }
+  .form-group input:focus, .form-group select:focus {
+    border-color: var(--amber);
+    background: var(--white);
+  }
+  .form-submit {
+    margin-top: 10px;
+    background: var(--amber); color: var(--navy);
+    font-family: 'Inter', sans-serif;
+    font-weight: 700; font-size: 1rem; padding: 16px 44px;
+    border: none; border-radius: 4px; cursor: pointer;
+    transition: background 0.2s;
+  }
+  .form-submit:hover { background: var(--amber2); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--navy);
+    padding: 36px 5%;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 16px;
+  }
+  .footer-logo {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800; font-size: 1.2rem; color: var(--white);
+  }
+  .footer-logo span { color: var(--amber); }
+  footer p { color: var(--text-muted); font-size: 0.85rem; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 640px) {
+    .form-grid { grid-template-columns: 1fr; }
+    .form-group.full { grid-column: 1; }
+    .hero-actions { flex-direction: column; }
+    .btn-primary, .btn-secondary { text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">DISPATCH<span>PRO</span></div>
+  <a href="#contact" class="nav-cta">Schedule a Chat</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-eyebrow">Freight Dispatch Services · Box Trucks</div>
+  <h1 class="hero-headline">
+    Looking for a<br><em>Dedicated Box Truck</em><br>Dispatcher?
+  </h1>
+  <p class="hero-sub">
+    I help owner-operators find loads, communicate with brokers, and stay focused on what matters driving.
+  </p>
+  <div class="hero-actions">
+    <a href="#contact" class="btn-primary">Schedule a Free Chat</a>
+    <a href="#offer" class="btn-secondary">Try Dispatch Support Risk-Free</a>
+  </div>
+  <div class="hero-road"></div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="section-label">What I Handle</div>
+  <h2 class="section-title">What I Can Help With</h2>
+  <p class="section-sub">From finding the next load to closing the rate I handle the back office so you stay on the road.</p>
+  <div class="services-grid">
+
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 16V8a2 2 0 0 0-1-1.73L13 2.27a2 2 0 0 0-2 0L4 6.27A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+      </div>
+      <h3>Load Search</h3>
+      <p>I actively search load boards to find the best-paying freight that fits your truck and preferred lanes.</p>
+    </div>
+
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      </div>
+      <h3>Rate Negotiation</h3>
+      <p>I negotiate directly with brokers to maximize your rate per mile on every load.</p>
+    </div>
+
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      </div>
+      <h3>Broker Communication</h3>
+      <p>All back-and-forth with brokers confirmations, check calls, and updates handled for you.</p>
+    </div>
+
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 12h18M3 6h18M3 18h12"/></svg>
+      </div>
+      <h3>Route Planning</h3>
+      <p>I help map efficient routes and load sequences to reduce empty miles and increase profitability.</p>
+    </div>
+
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      </div>
+      <h3>Setup Packets</h3>
+      <p>I handle carrier onboarding paperwork and broker setup packets so you're cleared to haul fast.</p>
+    </div>
+
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <h3>Dispatch Support</h3>
+      <p>Ongoing dedicated support throughout your trips I'm reachable when you need answers fast.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- WHY -->
+<section id="why">
+  <div class="section-label">Why Work With Me</div>
+  <h2 class="section-title">Built Around<br>Your Operation</h2>
+  <p class="section-sub">No call centers. No rotating staff. You get one dispatcher who knows your truck and your goals.</p>
+  <div class="why-grid">
+
+    <div class="why-card">
+      <div class="why-check">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h3>Dedicated One-on-One Support</h3>
+      <p>You work directly with me not a rotating team. I learn your lanes, your preferences, and your goals.</p>
+    </div>
+
+    <div class="why-card">
+      <div class="why-check">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h3>Fast Communication</h3>
+      <p>I respond quickly whether it's a load update, a broker question, or an issue on the road.</p>
+    </div>
+
+    <div class="why-card">
+      <div class="why-check">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h3>Focused on Box Trucks</h3>
+      <p>I specialize in box truck freight I understand the loads, the rates, and the brokers in your market.</p>
+    </div>
+
+    <div class="why-card">
+      <div class="why-check">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h3>Committed to Growing With You</h3>
+      <p>My goal is a long-term partnership. The more your operation grows, the better I can support it.</p>
+    </div>
+
+    <div class="why-card">
+      <div class="why-check">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h3>No Long-Term Contracts</h3>
+      <p>Stay because it's working not because you're locked in. No binding agreements, no pressure.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="section-label">Simple Process</div>
+  <h2 class="section-title">How It Works</h2>
+  <p class="section-sub">Getting started takes less than a day. Here's the process from first contact to first load.</p>
+  <div class="steps-row">
+
+    <div class="step">
+      <div class="step-num">01</div>
+      <h3>Quick Intro Chat</h3>
+      <p>We jump on a short chat to go over your truck, your lanes, your goals, and how I can best support your operation.</p>
+    </div>
+
+    <div class="step">
+      <div class="step-num">02</div>
+      <h3>Share Your MC & Equipment Info</h3>
+      <p>Send over your MC number, insurance cert, and truck specs so I can get you set up with brokers right away.</p>
+    </div>
+
+    <div class="step">
+      <div class="step-num">03</div>
+      <h3>Start Reviewing Available Loads</h3>
+      <p>I'll start pulling loads that match your truck and preferred lanes you approve and I book. Simple as that.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- OFFER -->
+<section id="offer">
+  <div class="offer-inner">
+    <div class="offer-tag">Limited Availability</div>
+    <h2 class="section-title">New Carrier Partnership Offer</h2>
+    <p class="section-sub">
+      I'm currently offering a free trial period to a limited number of carriers while I build long-term partnerships. You'll get full dispatch support load search, broker communication, rate negotiation at no cost to start. No catch, no commitment.
+    </p>
+    <a href="#contact" class="offer-cta">Claim Your Spot</a>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-label">Get in Touch</div>
+  <h2 class="section-title">Let's Talk</h2>
+  <p class="section-sub">Fill out the form below and I'll reach out within 24 hours to schedule your free intro chat.</p>
+
+  <form class="form-grid" onsubmit="handleSubmit(event)">
+    <div class="form-group">
+      <label for="name">Full Name</label>
+      <input type="text" id="name" placeholder="John Smith" required />
+    </div>
+    <div class="form-group">
+      <label for="company">Company Name</label>
+      <input type="text" id="company" placeholder="Smith Freight LLC" />
+    </div>
+    <div class="form-group">
+      <label for="phone">Phone Number</label>
+      <input type="tel" id="phone" placeholder="+1 (555) 000-0000" required />
+    </div>
+    <div class="form-group">
+      <label for="email">Email Address</label>
+      <input type="email" id="email" placeholder="john@smithfreight.com" required />
+    </div>
+    <div class="form-group">
+      <label for="mc">MC Number</label>
+      <input type="text" id="mc" placeholder="MC-000000" />
+    </div>
+    <div class="form-group">
+      <label for="equip">Equipment Type</label>
+      <select id="equip">
+        <option value="">Select your equipment</option>
+        <option>16 ft Box Truck</option>
+        <option>20 ft Box Truck</option>
+        <option>24 ft Box Truck</option>
+        <option>26 ft Box Truck</option>
+        <option>Other</option>
+      </select>
+    </div>
+    <div class="form-group full" style="margin-top:6px;">
+      <button type="submit" class="form-submit">Let's Talk →</button>
+    </div>
+  </form>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">DISPATCH<span>PRO</span></div>
+  <p>© 2026 · Dedicated Box Truck Dispatch</p>
+</footer>
+
+<script>
+  function handleSubmit(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('.form-submit');
+    btn.textContent = "✓ Sent! I'll be in touch soon.";
+    btn.style.background = '#1E3A5F';
+    btn.style.color = '#fff';
+    btn.disabled = true;
+  }
+</script>
+
+</body>
+</html>
